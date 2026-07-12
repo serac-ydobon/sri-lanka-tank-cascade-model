@@ -4,7 +4,7 @@ A network-based hydrological simulation of traditional Sri Lankan tank cascade i
 
 ## Project Status
 
-Early-stage — Phase 1: repository scaffolding only, no model code yet. Actively developed summer 2026; check back for updates.
+Early-stage — Phase 2: an initial catchment runoff-generation sub-model (`src/tank_model/hydrology.py`) exists; single-tank and cascade water balance code is still to come. Actively developed summer 2026; check back for updates.
 
 ## Motivation
 
@@ -36,7 +36,7 @@ Optimization toward the economic-output goal (e.g. LP/DP/GA/RL for irrigation re
 ## Planned Architecture
 
 - **Node-link network**: each real tank is a node with its own state (storage); edges represent spill/release routed to downstream tanks.
-- Modular design (not yet implemented): `src/tank_model/{single_tank, cascade_network, hydrology, irrigation, optimization}.py`
+- Modular design: `src/tank_model/{single_tank, cascade_network, hydrology, irrigation, optimization}.py` — `hydrology.py` has an initial runoff-generation implementation; the rest are not yet implemented.
 - Config-driven cascade definitions (`configs/*.yaml`) planned so cascades can be specified without code changes.
 
 ```
@@ -46,6 +46,7 @@ Tank A → Tank B → Tank C   (diagram to be added)
 ## Water Balance Equation
 
 Core state update per tank per timestep:
+
 
 ```
 S_{t+1} = S_t + Inflow_t + Rainfall_t − Evaporation_t − Seepage_t − IrrigationRelease_t − Spill_t
@@ -67,14 +68,14 @@ tests/           unit tests
 
 ## Getting Started
 
-No installable code yet — setup instructions will be added once model code exists.
+No packaging/`requirements.txt` yet — setup instructions will be added once the environment is finalized. `src/tank_model/hydrology.py` depends on `numpy` (and `pandas`/`matplotlib` for demo/plotting code, not yet added to the repo).
 
 - Single-tank demo: coming soon (`notebooks/single_tank_demo.ipynb`)
 - Cascade demo: coming soon (`notebooks/cascade_simulation_demo.ipynb`)
 
 ## Roadmap
 
-- **Phase 1 (now)**: repository scaffolding, literature review
-- **Phase 2**: single-tank water balance model + demo notebook
+- **Phase 1 (done)**: repository scaffolding, literature review
+- **Phase 2 (in progress)**: single-tank water balance model + demo notebook — runoff-generation sub-model (`hydrology.py`) done; single-tank storage balance (`single_tank.py`) not yet started
 - **Phase 3**: cascade network model (multi-tank) + demo notebook
 - **Phase 4+**: optimization layer targeting agricultural economic output, incorporating climate, hydrology, agriculture, and population factors
