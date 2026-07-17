@@ -4,7 +4,7 @@ A network-based hydrological simulation of traditional Sri Lankan tank cascade i
 
 ## Project Status
 
-Early-stage — Phase 2: an initial catchment runoff-generation sub-model (`src/tank_model/hydrology.py`) exists; single-tank and cascade water balance code is still to come. Actively developed summer 2026; check back for updates.
+Early-stage — Phase 2: an initial catchment runoff-generation sub-model (`src/tank_model/hydrology.py`) and a stochastic rainfall generator (`src/tank_model/climate.py`) exist; single-tank and cascade water balance code is still to come. Actively developed summer 2026; check back for updates.
 
 ## Motivation
 

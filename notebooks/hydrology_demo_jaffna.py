@@ -10,47 +10,15 @@ from matplotlib.widgets import Slider
 # make src/ importable without a package install
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 from tank_model.hydrology import toymodel_new_4
+from tank_model.data_io import load_daily_rainfall_jaffna
 
 
 def main():
-    xlsx_path = r"C:\Users\sam_w\Desktop\Hydrological Model\1975-2025 daily Rainfall_ Jaffna and Iranaimadu .xlsx"
-    sheet = "qry_xdaily_data"
-
-    df = pd.read_excel(xlsx_path, sheet_name=sheet, header=1)  # header row is the 2nd row in the sheet
-    df["station_name"] = df["station_name"].astype(str).str.strip().str.upper()
-
     start_year = 2022
     end_year = 2024
 
-    sub = df[
-        (df["station_name"] == "JAFFNA") &
-        (df["Year"] >= start_year) &
-        (df["Year"] <= end_year)
-    ].copy()
-
-    # day columns are integers 1..31
-    day_cols = [c for c in sub.columns if isinstance(c, int)]
-
-    long = sub.melt(
-        id_vars=["Year", "Month"],
-        value_vars=day_cols,
-        var_name="Day",
-        value_name="P"
-    )
-
-    long["Year"] = long["Year"].astype(int)
-    long["Month"] = long["Month"].astype(int)
-    long["Day"] = long["Day"].astype(int)
-
-    long["date"] = pd.to_datetime(
-        dict(year=long["Year"], month=long["Month"], day=long["Day"]),
-        errors="coerce"
-    )
-    long = long.dropna(subset=["date"])
-
-    long["P"] = pd.to_numeric(long["P"], errors="coerce").fillna(0.0)
-
-    daily = long.groupby("date", as_index=False)["P"].sum().sort_values("date")
+    daily = load_daily_rainfall_jaffna(station="JAFFNA")
+    daily = daily[(daily["date"].dt.year >= start_year) & (daily["date"].dt.year <= end_year)].reset_index(drop=True)
 
     print("Days:", len(daily), "from", daily["date"].min().date(), "to", daily["date"].max().date())
 
